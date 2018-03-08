@@ -1,13 +1,34 @@
 var game = {
-  init: function () {
-
+  start: function () {
+    // This function sets up the game and it's objects
   },
-  play: function () {
+  update: function () {
+    // This function advances each object by one step
 
+    game.time += 1 / 60; // The game runs at 60 frames per second
+    window.requestAnimationFrame(game.update);
   },
-  draw: function () {
+  paint: function () {
+    // This function is used for displaying graphics to the player
+    game.canvas.clear();
 
+    window.requestAnimationFrame(game.paint);
   },
+  clean: function () {
+    // This function removes any game objects marked as 'destroyed'
+    // from the global collection
+
+    // TODO: Collect garbage from objects array
+
+    window.requestAnimationFrame(game.clean);
+  },
+  states: {
+    playing: 0,
+    paused: 1
+  },
+  state: 0, // Playing
+  time: 0, // The amount of time in seconds elapsed during play
+  objects: [], // Starts out with no objects, but they can be added later
   canvas: {
     node: $("game")[0],
     context: $("#game")[0].getContext("2d"),
@@ -25,7 +46,12 @@ var game = {
 };
 
 $("document").ready(function () {
-  // TODO: start game loop
+  // Begin the game loop
+  game.start();
+
+  window.requestAnimationFrame(game.update);
+  window.requestAnimationFrame(game.paint);
+  window.requestAnimationFrame(game.clean);
 });
 
 // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
