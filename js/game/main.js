@@ -1,5 +1,5 @@
 var game = {
-
+  title: "Game"
 }
 
 $('document').ready(function () {

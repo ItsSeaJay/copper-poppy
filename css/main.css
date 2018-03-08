@@ -1,10 +1,16 @@
 /* The main stylesheet for Copper Poppy
 an HTML5 canvas game template */
 
+/* Make the background a more sensible colour */
 body {
   background-color: black;
 }
 
-canvas {
+/* Recolour and center the game's canvas */
+#game {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
   background-color: white;
+  border: 1px solid grey;
 }
