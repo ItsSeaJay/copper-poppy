@@ -12,6 +12,14 @@ var game = {
     // This function is used for displaying graphics to the player
     game.canvas.clear();
 
+    // Demonstrate that the context has been set up correctly
+    game.canvas.context.fillRect(
+      game.canvas.width / 2, // x
+      game.canvas.height / 2, // y
+      32, // width
+      32 // height
+    );
+
     window.requestAnimationFrame(game.paint);
   },
   clean: function () {
