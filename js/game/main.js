@@ -2,11 +2,31 @@ var game = {
   start: function () {
     // This function sets up the game and it's objects
     var player = game.object.create(
-      game.canvas.width / 2, // x
+      -32, // x
       game.canvas.height / 2 // y
     );
+    player.start = function () {
+      this.speed = 4;
+      this.direction = 0; // Not moving
+    };
     player.update = function () {
+      if (game.input.keyboard["a"]) {
+        this.direction = -1;
+      } else if (game.input.keyboard["d"]) {
+        this.direction = 1;
+      } else {
+        this.direction = 0;
+      }
 
+      this.position.x += this.direction * this.speed;
+      this.position.y = (Math.sin(game.time) * game.canvas.height / 4) + game.canvas.height / 2;
+
+      // Wrap around the screen horizontally
+      if (this.position.x > game.canvas.width) {
+        this.position.x = -32;
+      } else if (this.position.x < -32) {
+        this.position.x = game.canvas.width;
+      }
     };
     player.paint = function () {
       game.canvas.context.fillRect(
@@ -16,6 +36,11 @@ var game = {
         32
       );
     };
+
+    // Start all game objects regardless of state
+    for (var object = 0; object < game.objects.length; object++) {
+      game.objects[object].start();
+    }
   },
   update: function () {
     // This function advances each object by one step
@@ -89,6 +114,8 @@ var game = {
       paint: function () {}
     },
     create: function (x, y) {
+      // This function is used for creating a new kind of object
+      // and pushing it onto the array
       var object = game.object.prototype;
       object.position.x = x;
       object.position.y = y;
@@ -98,6 +125,7 @@ var game = {
       return object;
     },
     clone: function (object, x, y) {
+      // This function is used to create a copy of an existing game prototype
       object.x = x;
       object.y = y;
 
@@ -120,12 +148,25 @@ var game = {
         this.height
       );
     }
-  }
+  },
+  input: {
+		keyboard: [],
+		handle: function () {
+			$("body").on("keydown", function (event) {
+				game.input.keyboard[event.key] = true;
+			});
+
+			$("body").on("keyup", function (event) {
+				 game.input.keyboard[event.key] = false;
+			});
+		}
+	}
 };
 
 $("document").ready(function () {
   // Begin the game loop
   game.start();
+  game.input.handle();
 
   window.requestAnimationFrame(game.update);
   window.requestAnimationFrame(game.paint);
