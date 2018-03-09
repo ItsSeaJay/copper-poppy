@@ -10,9 +10,9 @@ var game = {
       this.direction = 0; // Not moving
     };
     player.update = function () {
-      if (game.input.keyboard["a"]) {
+      if (game.input.keyboard["a"] || game.input.keyboard["ArrowLeft"]) {
         this.direction = -1;
-      } else if (game.input.keyboard["d"]) {
+      } else if (game.input.keyboard["d"] || game.input.keyboard["ArrowRight"]) {
         this.direction = 1;
       } else {
         this.direction = 0;
