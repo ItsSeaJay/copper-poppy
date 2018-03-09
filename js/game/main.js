@@ -16,8 +16,6 @@ var game = {
         32
       );
     };
-
-    console.log(player.x, player.y);
   },
   update: function () {
     // This function advances each object by one step
@@ -43,6 +41,7 @@ var game = {
     // This function is used for displaying graphics to the player
     game.canvas.clear();
 
+    // Draw different things depending on the current  game state
     switch (game.state) {
       case game.states.playing:
         for (var object = 0; object < game.objects.length; object++) {
@@ -62,7 +61,13 @@ var game = {
     // This function removes any game objects marked as 'destroyed'
     // from the global collection
 
-    // TODO: Collect garbage from objects array
+    // This loop iterates backwards to deal with
+    // the array changing size as it iterates
+    for (var object = game.objects.length - 1; object >= 0; object--) {
+			if (game.objects[object].destroyed) {
+				game.objects.splice(object, 1);
+			}
+		}
 
     window.requestAnimationFrame(game.clean);
   },
