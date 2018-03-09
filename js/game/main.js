@@ -1,9 +1,40 @@
 var game = {
   start: function () {
     // This function sets up the game and it's objects
+    var player = game.object.create(
+      game.canvas.width / 2, // x
+      game.canvas.height / 2 // y
+    );
+    player.update = function () {
+
+    };
+    player.paint = function () {
+      game.canvas.context.fillRect(
+        this.position.x,
+        this.position.y,
+        32,
+        32
+      );
+    };
+
+    console.log(player.x, player.y);
   },
   update: function () {
     // This function advances each object by one step
+    switch (game.state) {
+      case game.states.playing:
+        if (game.objects.length > 0) {
+          for (var object = 0; object < game.objects.length; object++) {
+            game.objects[object].update();
+          }
+        }
+        break;
+      case game.states.paused:
+
+        break;
+      default:
+        break;
+    }
 
     game.time += 1 / 60; // The game runs at 60 frames per second
     window.requestAnimationFrame(game.update);
@@ -12,13 +43,18 @@ var game = {
     // This function is used for displaying graphics to the player
     game.canvas.clear();
 
-    // Demonstrate that the context has been set up correctly
-    game.canvas.context.fillRect(
-      game.canvas.width / 2, // x
-      game.canvas.height / 2, // y
-      32, // width
-      32 // height
-    );
+    switch (game.state) {
+      case game.states.playing:
+        for (var object = 0; object < game.objects.length; object++) {
+          game.objects[object].paint();
+        };
+        break;
+      case game.states.paused:
+
+        break;
+      default:
+        break;
+    }
 
     window.requestAnimationFrame(game.paint);
   },
@@ -36,6 +72,35 @@ var game = {
   },
   state: 0, // Playing
   time: 0, // The amount of time in seconds elapsed during play
+  object: {
+    prototype: {
+      destroyed: false,
+      position: {
+        x: 0,
+        y: 0
+      },
+      start: function () {},
+      update: function () {},
+      paint: function () {}
+    },
+    create: function (x, y) {
+      var object = game.object.prototype;
+      object.position.x = x;
+      object.position.y = y;
+
+      game.objects.push(object);
+
+      return object;
+    },
+    clone: function (object, x, y) {
+      object.x = x;
+      object.y = y;
+
+      game.objects.push(object);
+
+      return object;
+    }
+  },
   objects: [], // Starts out with no objects, but they can be added later
   canvas: {
     node: $("game")[0],
